@@ -42,3 +42,7 @@ Playwright connects to Chrome through its remote debugging port (`9222`), so Chr
 
 - [User documentation](docs/user.md)
 - [Usage examples](docs/examples.md)
+
+---
+
+> **Note:** This project was originally developed elsewhere, so this repository only contains the latest version and not the full commit history. The documentation was originally written in Slovak and translated into English with the help of AI.

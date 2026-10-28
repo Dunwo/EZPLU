@@ -11,6 +11,12 @@ __pycache__/
 
 .env
 
+*.exe
+*.ico
+/build
+/dist
+*.spec
+
 .vscode/
 .idea/
 .DS_Store

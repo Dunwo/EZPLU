@@ -6,6 +6,7 @@ from pynput import keyboard
 import flet as ft
 import subprocess
 import random
+import winreg
 
 import os
 os.environ["NODE_OPTIONS"] = "--no-deprecation"
@@ -458,8 +459,42 @@ def cmd_ReadDB(state:AppState):
         else:
             print("Please use initialize function first.")
 
-def cmd_StartBrowser(state:AppState):
-    chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+def get_chrome_path():
+    """Finds the Chrome executable path via the Windows Registry or common locations."""
+    # 1. Check Registry (System-wide installation)
+    try:
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe") as key:
+            return winreg.QueryValue(key, None)
+    except FileNotFoundError:
+        pass
+
+    # 2. Check Registry (User-specific installation)
+    try:
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe") as key:
+            return winreg.QueryValue(key, None)
+    except FileNotFoundError:
+        pass
+
+    # 3. Fallback to common hardcoded paths
+    common_paths = [
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+        os.path.join(os.environ.get("LOCALAPPDATA", ""), r"Google\Chrome\Application\chrome.exe")
+    ]
+    
+    for path in common_paths:
+        if os.path.exists(path):
+            return path
+
+    raise FileNotFoundError("Could not find chrome.exe on this system.")
+
+def cmd_StartBrowser(state: AppState):
+    try:
+        chrome_path = get_chrome_path()
+    except FileNotFoundError as e:
+        print(f"Error starting browser: {e}")
+        return
+
     user_data_dir = r"C:\chrome-playwright"
     debug_port = "9222"
     command = [

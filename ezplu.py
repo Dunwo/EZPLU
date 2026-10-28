@@ -19,8 +19,8 @@ async def renderwindow(page:ft.Page):
     listener.start()
     state.GUIOn = True
     page.title = "EZPLU"
-    page.window_width = 500
-    page.window_height = 400
+    page.window.width = 1200
+    page.window.height = 800
     page.vertical_alignment = ft.MainAxisAlignment.START
 
     #Log
@@ -44,18 +44,18 @@ async def renderwindow(page:ft.Page):
     #Buttons
     buttons_row_1 = ft.Row(
         controls=[
-            ft.ElevatedButton("Start Chrome", on_click=lambda e: cmd_StartBrowser(state)),
-            ft.ElevatedButton("Init Page", on_click=lambda e: asyncio.create_task(cmd_init_page(state))),
-            ft.ElevatedButton("Load EasyPlu", on_click=lambda e: asyncio.create_task(loadWeb(state))),
+            ft.Button("Start Chrome", on_click=lambda e: cmd_StartBrowser(state)),
+            ft.Button("Init Page", on_click=lambda e: asyncio.create_task(cmd_init_page(state))),
+            ft.Button("Load EasyPlu", on_click=lambda e: asyncio.create_task(loadWeb(state))),
         ]
     )
 
     buttons_row_2 = ft.Row(
         controls=[
-            ft.ElevatedButton("Run", on_click=lambda e: asyncio.create_task(cmd_run(state))),
-            ft.ElevatedButton("Toggle Helper", on_click=lambda e: cmd_TurnHelper(state)),
-            ft.ElevatedButton("Save DB", on_click=lambda e: cmd_savedb(state)),
-            ft.ElevatedButton("Clear Log", on_click=lambda e: clearLog()),
+            ft.Button("Run", on_click=lambda e: asyncio.create_task(cmd_run(state))),
+            ft.Button("Toggle Helper", on_click=lambda e: cmd_TurnHelper(state)),
+            ft.Button("Save DB", on_click=lambda e: cmd_savedb(state)),
+            ft.Button("Clear Log", on_click=lambda e: clearLog()),
         ]
     )
 
@@ -69,7 +69,7 @@ async def renderwindow(page:ft.Page):
         controls=[
             ft.Text("Helper Hotkey:"),
             hotkey_input,
-            ft.ElevatedButton("Change Hotkey", on_click=lambda e: ChangeHotkey(hotkey_input.value,state)),
+            ft.Button("Change Hotkey", on_click=lambda e: ChangeHotkey(hotkey_input.value,state)),
         ]
     )
 
@@ -91,10 +91,10 @@ async def renderwindow(page:ft.Page):
         controls=[
             ft.Text("Minimum Wait Time:"),
             minWaitTimeInput,
-            ft.ElevatedButton("Change minimum time", on_click=lambda e: fletParseMinTime(state,minWaitTimeInput.value)),
+            ft.Button("Change minimum time", on_click=lambda e: fletParseMinTime(state,minWaitTimeInput.value)),
             ft.Text("Maximum Wait Time:"),
             maxWaitTimeInput,
-            ft.ElevatedButton("Change maximum time", on_click=lambda e: fletParseMaxTime(state,maxWaitTimeInput.value)),
+            ft.Button("Change maximum time", on_click=lambda e: fletParseMaxTime(state,maxWaitTimeInput.value)),
         ]
     )
 
@@ -611,6 +611,6 @@ if __name__ == "__main__":
     helper = False
 
     if GUIOnGlobal:
-        ft.app(target=renderwindow)
+        ft.run(renderwindow)
     else:
         asyncio.run(main())
